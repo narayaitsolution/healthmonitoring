@@ -36,6 +36,9 @@ class PasienDashboardController extends Controller
         // Hitung persentase dan kategori tekanan darah
         $bloodPressureData = $this->calculateBloodPressurePercentage($latestRecord);
         
+        // Hitung data BMI
+        $bmiData = $this->calculateBMIData($user);
+        
         return view('pasien.dashboard', compact(
             'user',
             'bloodPressureRecords',
@@ -43,7 +46,8 @@ class PasienDashboardController extends Controller
             'bloodPressureCategories',
             'bmiCategories',
             'chartData',
-            'bloodPressureData'
+            'bloodPressureData',
+            'bmiData'
         ));
     }
     
@@ -109,6 +113,50 @@ class PasienDashboardController extends Controller
     }
 
     /**
+     * Calculate BMI data for user
+     */
+    private function calculateBMIData($user)
+    {
+        // Ambil data weight terbaru dari blood_pressure_records
+        $latestRecord = BloodPressureRecord::where('user_id', $user->id)
+            ->whereNotNull('weight')
+            ->orderBy('date', 'desc')
+            ->orderBy('time', 'desc')
+            ->first();
+
+        // Cek apakah ada data weight dan height
+        if (!$latestRecord || !$latestRecord->weight || !$user->height) {
+            return [
+                'bmi_value' => 0,
+                'category' => 'No Data',
+                'category_class' => 'no_data'
+            ];
+        }
+
+        // Hitung BMI (height dalam cm, weight dalam kg)
+        $heightInMeters = $user->height / 100;
+        $bmiValue = $latestRecord->weight / ($heightInMeters * $heightInMeters);
+
+        // Cari kategori BMI yang sesuai
+        $bmiCategory = BmiCategory::where('min_value', '<=', $bmiValue)
+            ->where('max_value', '>=', $bmiValue)
+            ->first();
+
+        $categoryName = $bmiCategory ? $bmiCategory->category : 'Unknown';
+        
+        // Convert category name to CSS class format
+        $categoryClass = strtolower($categoryName);
+        $categoryClass = str_replace([' ', '-'], '_', $categoryClass);
+        $categoryClass = preg_replace('/[^a-z0-9_]/', '', $categoryClass);
+
+        return [
+            'bmi_value' => round($bmiValue, 1),
+            'category' => $categoryName,
+            'category_class' => $categoryClass
+        ];
+    }
+
+    /**
  * Show pasien dashboard
  */
 public function indexMobile()
@@ -134,6 +182,9 @@ public function indexMobile()
     // Hitung persentase dan kategori tekanan darah
     $bloodPressureData = $this->calculateBloodPressurePercentage($latestRecord);
     
+    // Hitung data BMI
+    $bmiData = $this->calculateBMIData($user);
+    
     return view('pasien.dashboard', compact(
         'user',
         'bloodPressureRecords',
@@ -141,7 +192,8 @@ public function indexMobile()
         'bloodPressureCategories',
         'bmiCategories',
         'chartData',
-        'bloodPressureData'
+        'bloodPressureData',
+        'bmiData'
     ));
 }
 }

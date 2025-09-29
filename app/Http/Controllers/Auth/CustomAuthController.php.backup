@@ -23,9 +23,6 @@ class CustomAuthController extends Controller
      */
     public function redirectToGoogle()
     {
-        // Regenerate session untuk mencegah InvalidStateException
-        request()->session()->regenerate();
-        
         return Socialite::driver('google')->redirect();
     }
 
@@ -33,20 +30,6 @@ class CustomAuthController extends Controller
      * Handle Google OAuth callback
      */
     public function handleGoogleCallback()
-    {
-        // Ambil retry count dari session jika ada
-        $retryCount = request()->session()->get('oauth_retry_count', 0);
-        
-        // Reset retry count di session setelah diambil
-        request()->session()->forget('oauth_retry_count');
-        
-        return $this->handleGoogleCallbackWithRetry($retryCount);
-    }
-    
-    /**
-     * Handle Google OAuth callback with retry mechanism
-     */
-    private function handleGoogleCallbackWithRetry($retryCount = 0)
     {
         try {
             $googleUser = Socialite::driver('google')->user();
@@ -96,9 +79,6 @@ class CustomAuthController extends Controller
             // Login user
             Auth::login($user);
             
-            // Extend session untuk user yang baru login
-            $this->extendUserSession();
-            
             // Redirect berdasarkan status profile
             if (!$user->gender || !$user->birth_date || !$user->height) {
                 \Log::info('Profile belum lengkap, redirect ke profile setup');
@@ -110,23 +90,8 @@ class CustomAuthController extends Controller
             return $this->redirectBasedOnRole($user->role);
             
         } catch (\Laravel\Socialite\Two\InvalidStateException $e) {
-            \Log::warning('Google OAuth InvalidStateException (attempt ' . ($retryCount + 1) . '): ' . $e->getMessage());
-            
-            // Auto-retry dengan session regeneration jika belum mencoba 2 kali
-            if ($retryCount < 2) {
-                \Log::info('Attempting auto-retry with session regeneration...');
-                
-                // Regenerate session dan coba lagi
-                request()->session()->regenerate();
-                request()->session()->put('oauth_retry_count', $retryCount + 1);
-                
-                // Redirect ulang ke Google OAuth
-                return redirect()->route('auth.google');
-            }
-            
-            // Jika sudah retry 2 kali, baru tampilkan error tapi dengan pesan yang lebih user-friendly
-            \Log::error('Google OAuth failed after 2 retries');
-            return redirect()->route('login')->with('error', 'Login failed. Please try again in a few moments.');
+            \Log::error('Google OAuth InvalidStateException: ' . $e->getMessage());
+            return redirect()->route('login')->with('error', 'Session expired. Please try logging in again.');
         } catch (\Laravel\Socialite\Two\ProviderException $e) {
             \Log::error('Google OAuth ProviderException: ' . $e->getMessage());
             return redirect()->route('login')->with('error', 'Google authentication failed. Please try again.');
@@ -150,23 +115,6 @@ class CustomAuthController extends Controller
         return redirect()->route('login');
     }
 
-    /**
-     * Extend user session untuk mencegah expired session
-     */
-    private function extendUserSession()
-    {
-        // Regenerate session ID untuk keamanan
-        request()->session()->regenerate();
-        
-        // Set session lifetime khusus untuk user yang baru login (4 jam = 240 menit)
-        config(['session.lifetime' => 240]);
-        
-        // Update last activity timestamp
-        request()->session()->put('last_activity', time());
-        
-        \Log::info('Session extended for authenticated user');
-    }
-    
     /**
      * Redirect based on user role
      */

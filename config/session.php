@@ -31,7 +31,7 @@ return [
     |
     */
 
-    'lifetime' => env('SESSION_LIFETIME', 120),
+    'lifetime' => env('SESSION_LIFETIME', 180), // Diperpanjang dari 120 menit ke 180 menit untuk OAuth
 
     'expire_on_close' => false,
 

@@ -369,12 +369,12 @@
                 </div>
             </div>
             
-            <div class="status-card" id="bmiCard">
+            <div class="status-card bmi-{{ $bmiData['category_class'] }}" id="bmiCard">
                 <div class="status-icon">⚖️</div>
                 <div class="status-content">
-                    <h4>BMI</h4>
-                    <div class="percentage" id="bmiPercentage">0%</div>
-                    <div class="status-text" id="bmiStatus">Normal</div>
+                    <h4>Body Mass Index</h4>
+                    <div class="percentage" id="bmiValue">{{ $bmiData['bmi_value'] }}</div>
+                    <div class="status-text" id="bmiStatus">{{ $bmiData['category'] }}</div>
                 </div>
             </div>
         </div>
@@ -548,10 +548,8 @@
                 // Calculate Blood Pressure percentage
                 calculateBloodPressureStatus(latestRecord, bloodPressureCategories);
                 
-                // Calculate BMI percentage if weight is available
-                if (latestRecord.weight && user.height) {
-                    calculateBMIStatus(latestRecord.weight, user.height, user.age, user.gender, bmiCategories);
-                }
+                // BMI is already calculated in controller and displayed in HTML
+                // No need for client-side BMI calculation
             }
         }
         
@@ -569,56 +567,7 @@
             );
         }
         
-        function calculateBMIStatus(weight, height, age, gender, bmiCategories) {
-            // Calculate BMI
-            const heightInMeters = height / 100;
-            const bmi = weight / (heightInMeters * heightInMeters);
-            
-            // Find BMI category from database
-            let category = null;
-            let percentage = 0;
-            let status = '';
-            
-            for (let i = 0; i < bmiCategories.length; i++) {
-                const cat = bmiCategories[i];
-                if (bmi >= cat.min_value && bmi <= cat.max_value) {
-                    category = cat.category.toLowerCase().replace(/\s+/g, '_');
-                    status = cat.category;
-                    
-                    // Calculate percentage within category range
-                    const range = cat.max_value - cat.min_value;
-                    const position = bmi - cat.min_value;
-                    percentage = (position / range) * 100;
-                    
-                    // Adjust percentage based on category severity
-                    switch (cat.category) {
-                        case 'Underweight':
-                            percentage = (bmi / cat.max_value) * 100; // 0-100% within underweight range
-                            break;
-                        case 'Normal':
-                            percentage = ((bmi - cat.min_value) / (cat.max_value - cat.min_value)) * 100; // 0-100% within normal range
-                            break;
-                        case 'Overweight':
-                            percentage = ((bmi - cat.min_value) / (cat.max_value - cat.min_value)) * 100; // 0-100% within overweight range
-                            break;
-                        case 'Obesitas I':
-                            percentage = ((bmi - cat.min_value) / (cat.max_value - cat.min_value)) * 100; // 0-100% within obesitas I range
-                            break;
-                        case 'Obesitas II':
-                            percentage = ((bmi - cat.min_value) / (cat.max_value - cat.min_value)) * 100; // 0-100% within obesitas II range
-                            break;
-                        case 'Obesitas III':
-                            percentage = Math.min(((bmi - cat.min_value) / 10) * 100, 100); // 0-100% within obesitas III range
-                            break;
-                    }
-                    break;
-                }
-            }
-            
-            if (category) {
-                updateBMICard('bmiCard', 'bmiPercentage', 'bmiStatus', percentage, category, status);
-            }
-        }
+        // BMI calculation is now handled in the controller
         
         function updateBloodPressureCard(cardId, percentageId, statusId, percentage, category, status) {
             const card = document.getElementById(cardId);
@@ -638,23 +587,7 @@
             statusElement.textContent = status;
         }
         
-        function updateBMICard(cardId, percentageId, statusId, percentage, category, status) {
-            const card = document.getElementById(cardId);
-            const percentageElement = document.getElementById(percentageId);
-            const statusElement = document.getElementById(statusId);
-            
-            if (card && percentageElement && statusElement) {
-                // Remove existing color classes
-                card.className = card.className.replace(/bmi-\w+/g, '');
-                
-                // Apply category-specific color class
-                card.classList.add('bmi-' + category);
-                
-                // Update percentage and status
-                percentageElement.textContent = Math.round(percentage) + '%';
-                statusElement.textContent = status;
-            }
-        }
+        // updateBMICard function removed - BMI data now comes from controller
         
         function updateStatusCard(cardId, percentageId, statusId, percentage, type) {
             const card = document.getElementById(cardId);
