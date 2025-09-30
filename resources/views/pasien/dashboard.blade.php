@@ -121,41 +121,39 @@
         
         /* Blood Pressure Color variations based on database categories */
         
-        /* Hipotensi - Ungu pastel (semakin kecil semakin gelap ungu) */
+        /* Hipotensi - Ungu pastel */
         .status-card.hipotensi { 
-            background: linear-gradient(135deg, #e8d5f2 0%, #c4a3d6 100%); 
+            background: linear-gradient(135deg, #e6e6fa 0%, #dda0dd 50%, #d8bfd8 100%); 
         }
-        .status-card.hipotensi .percentage { color: #6a4c93; }
+        .status-card.hipotensi .percentage { color: #663399; }
         
-        /* Normal - Hijau pastel ke kuning pastel */
+        /* Normal - Hijau pastel */
         .status-card.normal { 
-            background: linear-gradient(135deg, #d4edda 0%, #fff3cd 100%); 
+            background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 50%, #a5d6a7 100%); 
         }
-        .status-card.normal .percentage { color: #155724; }
+        .status-card.normal .percentage { color: #2e7d32; }
         
-        /* Pre-hipertensi - Kuning pastel ke oranye pastel */
-        .status-card.prehipertensi { 
-            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%); 
+        /* Pre-hipertensi - Kuning pastel */
+        .status-card.pre_hipertensi { 
+            background: linear-gradient(135deg, #fff9c4 0%, #fff176 50%, #ffeb3b 100%); 
         }
-        .status-card.prehipertensi .percentage { color: #856404; }
+        .status-card.pre_hipertensi .percentage { color: #f57f17; }
         
-        /* Hipertensi Stage 1 - Oranye pastel ke merah pastel */
+        /* Hipertensi Stage 1 - Orange pastel */
         .status-card.hipertensi_stage_1 { 
-            background: linear-gradient(135deg, #ffeaa7 0%, #f8d7da 100%); 
+            background: linear-gradient(135deg, #ffe0b2 0%, #ffb74d 50%, #ff9800 100%); 
         }
-        .status-card.hipertensi_stage_1 .percentage { color: #721c24; }
+        .status-card.hipertensi_stage_1 .percentage { color: #e65100; }
         
-        /* Hipertensi Stage 2 - Merah pastel ke merah tua */
+        /* Hipertensi Stage 2 - Merah muda pastel */
         .status-card.hipertensi_stage_2 { 
-            background: linear-gradient(135deg, #f8d7da 0%, #dc3545 100%); 
+            background: linear-gradient(135deg, #f8bbd9 0%, #f48fb1 50%, #e91e63 100%); 
         }
-        .status-card.hipertensi_stage_2 .percentage { color: #ffffff; }
-        .status-card.hipertensi_stage_2 .status-content h4,
-        .status-card.hipertensi_stage_2 .status-text { color: #ffffff; }
+        .status-card.hipertensi_stage_2 .percentage { color: #ad1457; }
         
-        /* Hipertensi Krisis - Merah tua ke hitam */
+        /* Hipertensi Krisis - Merah tua pastel */
         .status-card.hipertensi_krisis { 
-            background: linear-gradient(135deg, #dc3545 0%, #343a40 100%); 
+            background: linear-gradient(135deg, #ef9a9a 0%, #e57373 50%, #c62828 100%); 
         }
         .status-card.hipertensi_krisis .percentage { color: #ffffff; }
         .status-card.hipertensi_krisis .status-content h4,
@@ -163,43 +161,43 @@
         
         /* BMI Color variations based on database categories */
         
-        /* Underweight - Ungu pastel (semakin kecil semakin gelap ungu) */
-        .status-card.bmi-underweight { 
-            background: linear-gradient(135deg, #e6e6fa 0%, #d8bfd8 50%, #9370db 100%); 
+        /* Underweight - Ungu pastel */
+        .status-card.underweight { 
+            background: linear-gradient(135deg, #e6e6fa 0%, #dda0dd 50%, #d8bfd8 100%); 
         }
-        .status-card.bmi-underweight .percentage { color: #4b0082; }
+        .status-card.underweight .percentage { color: #663399; }
         
-        /* Normal - Hijau pastel ke kuning pastel */
-        .status-card.bmi-normal { 
-            background: linear-gradient(135deg, #e8f5e8 0%, #d4edda 50%, #fff3cd 100%); 
+        /* Normal - Hijau pastel */
+        .status-card.normal { 
+            background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 50%, #a5d6a7 100%); 
         }
-        .status-card.bmi-normal .percentage { color: #155724; }
+        .status-card.normal .percentage { color: #2e7d32; }
         
-        /* Overweight - Kuning pastel ke oranye pastel */
-        .status-card.bmi-overweight { 
-            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 50%, #ffd93d 100%); 
+        /* Overweight - Kuning pastel */
+        .status-card.overweight { 
+            background: linear-gradient(135deg, #fff9c4 0%, #fff176 50%, #ffeb3b 100%); 
         }
-        .status-card.bmi-overweight .percentage { color: #856404; }
+        .status-card.overweight .percentage { color: #f57f17; }
         
-        /* Obesitas I - Oranye pastel ke merah pastel */
-        .status-card.bmi-obesitas_i { 
-            background: linear-gradient(135deg, #ffd93d 0%, #ffb347 50%, #ff8c00 100%); 
+        /* Obesitas I - Orange pastel */
+        .status-card.obesitas_i { 
+            background: linear-gradient(135deg, #ffe0b2 0%, #ffb74d 50%, #ff9800 100%); 
         }
-        .status-card.bmi-obesitas_i .percentage { color: #cc5500; }
+        .status-card.obesitas_i .percentage { color: #e65100; }
         
-        /* Obesitas II - Merah pastel ke merah tua */
-        .status-card.bmi-obesitas_ii { 
-            background: linear-gradient(135deg, #ff8c00 0%, #ff6b6b 50%, #dc143c 100%); 
+        /* Obesitas II - Merah muda pastel */
+        .status-card.obesitas_ii { 
+            background: linear-gradient(135deg, #f8bbd9 0%, #f48fb1 50%, #e91e63 100%); 
         }
-        .status-card.bmi-obesitas_ii .percentage { color: #8b0000; }
+        .status-card.obesitas_ii .percentage { color: #ad1457; }
         
-        /* Obesitas III - Merah tua ke hitam */
-        .status-card.bmi-obesitas_iii { 
-            background: linear-gradient(135deg, #dc143c 0%, #8b0000 50%, #2f1b14 100%); 
+        /* Obesitas III - Merah tua pastel */
+        .status-card.obesitas_iii { 
+            background: linear-gradient(135deg, #ef9a9a 0%, #e57373 50%, #c62828 100%); 
         }
-        .status-card.bmi-obesitas_iii .percentage { color: #ffffff; }
-        .status-card.bmi-obesitas_iii .status-content h4,
-        .status-card.bmi-obesitas_iii .status-text { color: #ffffff; }
+        .status-card.obesitas_iii .percentage { color: #ffffff; }
+        .status-card.obesitas_iii .status-content h4,
+        .status-card.obesitas_iii .status-text { color: #ffffff; }
         
         .data-table {
             background: white;
@@ -347,7 +345,7 @@
     </div>
 
     <div class="container">
-
+    <a href="{{ route('pasien.blood-pressure.create') }}" class="btn btn-success btn-block">➕ Tambah Data Baru</a>
         <!-- Chart -->
         <div class="chart-container">
             <h3>📈 Grafik Riwayat Tekanan Darah</h3>
@@ -359,8 +357,9 @@
         </div>
 
         <!-- Health Status Cards -->
+        
         <div class="status-cards">
-            <div class="status-card" id="bloodPressureCard">
+            <div class="status-card {{ $bloodPressureData['category_class'] ?? 'normal' }}" id="bloodPressureCard">
                 <div class="status-icon">🩺</div>
                 <div class="status-content">
                     <h4>Tekanan Darah</h4>
@@ -369,7 +368,7 @@
                 </div>
             </div>
             
-            <div class="status-card bmi-{{ $bmiData['category_class'] }}" id="bmiCard">
+            <div class="status-card {{ $bmiData['category_class'] ?? 'normal' }}" id="bmiCard">
                 <div class="status-icon">⚖️</div>
                 <div class="status-content">
                     <h4>Body Mass Index</h4>
@@ -382,7 +381,7 @@
         <!-- Data Table -->
         <div class="data-table">
             <h3>⊞ Riwayat Kesehatan</h3>
-            <a href="{{ route('pasien.blood-pressure.create') }}" class="btn">➕ Tambah Data Baru</a>
+           
             
             @if($bloodPressureRecords->count() > 0)
                 <table id="healthRecordsTable" class="table table-striped table-bordered">
@@ -570,21 +569,16 @@
         // BMI calculation is now handled in the controller
         
         function updateBloodPressureCard(cardId, percentageId, statusId, percentage, category, status) {
-            const card = document.getElementById(cardId);
             const percentageElement = document.getElementById(percentageId);
             const statusElement = document.getElementById(statusId);
             
             // Update percentage
             percentageElement.textContent = Math.round(percentage) + '%';
             
-            // Remove existing color classes
-            card.classList.remove('hipotensi', 'normal', 'prehipertensi', 'hipertensi_stage_1', 'hipertensi_stage_2', 'hipertensi_krisis');
-            
-            // Add new color class based on category
-            card.classList.add(category);
-            
             // Update status text
             statusElement.textContent = status;
+            
+            // CSS class sudah diterapkan langsung di HTML, tidak perlu manipulasi JavaScript
         }
         
         // updateBMICard function removed - BMI data now comes from controller

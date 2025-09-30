@@ -14,6 +14,19 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+-- Dumping structure for table healthmonitor.blood_pressure_categories
+CREATE TABLE IF NOT EXISTS `blood_pressure_categories` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `category` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `systolic_min` int NOT NULL,
+  `systolic_max` int NOT NULL,
+  `diastolic_min` int NOT NULL,
+  `diastolic_max` int NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Dumping data for table healthmonitor.blood_pressure_categories: ~6 rows (approximately)
 DELETE FROM `blood_pressure_categories`;
 INSERT INTO `blood_pressure_categories` (`id`, `category`, `systolic_min`, `systolic_max`, `diastolic_min`, `diastolic_max`, `created_at`, `updated_at`) VALUES
@@ -24,12 +37,42 @@ INSERT INTO `blood_pressure_categories` (`id`, `category`, `systolic_min`, `syst
 	(5, 'Hipertensi Tahap 2', 160, 179, 100, 119, '2025-09-29 02:44:49', NULL),
 	(6, 'Kritis', 180, 999, 120, 999, '2025-09-29 02:45:12', NULL);
 
+-- Dumping structure for table healthmonitor.blood_pressure_records
+CREATE TABLE IF NOT EXISTS `blood_pressure_records` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint unsigned NOT NULL,
+  `patient_id` bigint unsigned DEFAULT NULL,
+  `date` date NOT NULL,
+  `time` time NOT NULL,
+  `systolic` int NOT NULL,
+  `diastolic` int NOT NULL,
+  `weight` decimal(5,2) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `blood_pressure_records_user_id_foreign` (`user_id`),
+  KEY `blood_pressure_records_patient_id_foreign` (`patient_id`),
+  CONSTRAINT `blood_pressure_records_patient_id_foreign` FOREIGN KEY (`patient_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `blood_pressure_records_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Dumping data for table healthmonitor.blood_pressure_records: ~1 rows (approximately)
 DELETE FROM `blood_pressure_records`;
 INSERT INTO `blood_pressure_records` (`id`, `user_id`, `patient_id`, `date`, `time`, `systolic`, `diastolic`, `weight`, `created_at`, `updated_at`) VALUES
 	(3, 4, NULL, '2025-09-29', '05:51:00', 141, 94, 72.00, '2025-09-28 22:51:45', '2025-09-28 22:51:45');
 
--- Dumping data for table healthmonitor.bmi_categories: ~5 rows (approximately)
+-- Dumping structure for table healthmonitor.bmi_categories
+CREATE TABLE IF NOT EXISTS `bmi_categories` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `category` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `min_value` decimal(5,2) NOT NULL,
+  `max_value` decimal(5,2) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table healthmonitor.bmi_categories: ~4 rows (approximately)
 DELETE FROM `bmi_categories`;
 INSERT INTO `bmi_categories` (`id`, `category`, `min_value`, `max_value`, `created_at`, `updated_at`) VALUES
 	(19, 'Kurus', 0.00, 18.40, '2025-09-29 02:46:30', NULL),
@@ -38,8 +81,29 @@ INSERT INTO `bmi_categories` (`id`, `category`, `min_value`, `max_value`, `creat
 	(22, 'Obesitas 1', 25.00, 29.90, '2025-09-29 02:50:33', NULL),
 	(23, 'Obesitas 2', 30.00, 99.00, '2025-09-29 02:50:46', NULL);
 
+-- Dumping structure for table healthmonitor.failed_jobs
+CREATE TABLE IF NOT EXISTS `failed_jobs` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Dumping data for table healthmonitor.failed_jobs: ~0 rows (approximately)
 DELETE FROM `failed_jobs`;
+
+-- Dumping structure for table healthmonitor.migrations
+CREATE TABLE IF NOT EXISTS `migrations` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `batch` int NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table healthmonitor.migrations: ~0 rows (approximately)
 DELETE FROM `migrations`;
@@ -56,14 +120,73 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 	(10, '2025_09_20_034321_add_avatar_to_users_table', 1),
 	(11, '2025_09_20_040800_modify_password_column_in_users_table', 1);
 
+-- Dumping structure for table healthmonitor.password_reset_tokens
+CREATE TABLE IF NOT EXISTS `password_reset_tokens` (
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Dumping data for table healthmonitor.password_reset_tokens: ~0 rows (approximately)
 DELETE FROM `password_reset_tokens`;
+
+-- Dumping structure for table healthmonitor.patient_nakes_assignments
+CREATE TABLE IF NOT EXISTS `patient_nakes_assignments` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `patient_id` bigint unsigned NOT NULL,
+  `nakes_id` bigint unsigned NOT NULL,
+  `assigned_at` timestamp NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `patient_nakes_assignments_patient_id_foreign` (`patient_id`),
+  KEY `patient_nakes_assignments_nakes_id_foreign` (`nakes_id`),
+  CONSTRAINT `patient_nakes_assignments_nakes_id_foreign` FOREIGN KEY (`nakes_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `patient_nakes_assignments_patient_id_foreign` FOREIGN KEY (`patient_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table healthmonitor.patient_nakes_assignments: ~0 rows (approximately)
 DELETE FROM `patient_nakes_assignments`;
 
+-- Dumping structure for table healthmonitor.personal_access_tokens
+CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `tokenable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tokenable_id` bigint unsigned NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `abilities` text COLLATE utf8mb4_unicode_ci,
+  `last_used_at` timestamp NULL DEFAULT NULL,
+  `expires_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
+  KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Dumping data for table healthmonitor.personal_access_tokens: ~0 rows (approximately)
 DELETE FROM `personal_access_tokens`;
+
+-- Dumping structure for table healthmonitor.users
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `avatar` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email_verified_at` timestamp NULL DEFAULT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `role` enum('pasien','nakes','admin') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pasien',
+  `gender` enum('laki-laki','perempuan') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `birth_date` date DEFAULT NULL,
+  `height` int DEFAULT NULL COMMENT 'Height in cm',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `users_email_unique` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table healthmonitor.users: ~0 rows (approximately)
 DELETE FROM `users`;

@@ -39,6 +39,7 @@ class PasienDashboardController extends Controller
         // Hitung data BMI
         $bmiData = $this->calculateBMIData($user);
         
+        
         return view('pasien.dashboard', compact(
             'user',
             'bloodPressureRecords',
@@ -80,8 +81,8 @@ class PasienDashboardController extends Controller
     {
         if (!$latestRecord) {
             return [
-                'percentage' => 0,
-                'category' => 'No Data',
+                'percentage' => 100,
+                'category' => 'Normal',
                 'category_class' => 'normal'
             ];
         }
@@ -93,10 +94,21 @@ class PasienDashboardController extends Controller
         // Hitung persentase: (systolic_user / systolic_max_normal) * 100
         $percentage = ($latestRecord->systolic / $systolicMaxNormal) * 100;
 
-        // Tentukan kategori berdasarkan systolic user
-        $category = BloodPressureCategory::where('systolic_min', '<=', $latestRecord->systolic)
-            ->where('systolic_max', '>=', $latestRecord->systolic)
-            ->first();
+        // Tentukan kategori berdasarkan systolic (prioritas utama) atau diastolic
+        $category = BloodPressureCategory::where(function($query) use ($latestRecord) {
+            $query->where('systolic_min', '<=', $latestRecord->systolic)
+                  ->where('systolic_max', '>=', $latestRecord->systolic);
+        })->orWhere(function($query) use ($latestRecord) {
+            $query->where('diastolic_min', '<=', $latestRecord->diastolic)
+                  ->where('diastolic_max', '>=', $latestRecord->diastolic);
+        })->orderBy('systolic_min', 'desc')->first();
+        
+        // Jika tidak ditemukan, cari berdasarkan systolic saja
+        if (!$category) {
+            $category = BloodPressureCategory::where('systolic_min', '<=', $latestRecord->systolic)
+                ->orderBy('systolic_min', 'desc')
+                ->first();
+        }
 
         $categoryName = $category ? $category->category : 'Unknown';
         
@@ -127,9 +139,9 @@ class PasienDashboardController extends Controller
         // Cek apakah ada data weight dan height
         if (!$latestRecord || !$latestRecord->weight || !$user->height) {
             return [
-                'bmi_value' => 0,
-                'category' => 'No Data',
-                'category_class' => 'no_data'
+                'bmi_value' => 22.5,
+                'category' => 'Normal',
+                'category_class' => 'normal'
             ];
         }
 
@@ -144,7 +156,7 @@ class PasienDashboardController extends Controller
 
         $categoryName = $bmiCategory ? $bmiCategory->category : 'Unknown';
         
-        // Convert category name to CSS class format
+        // Convert category name to CSS class format for BMI
         $categoryClass = strtolower($categoryName);
         $categoryClass = str_replace([' ', '-'], '_', $categoryClass);
         $categoryClass = preg_replace('/[^a-z0-9_]/', '', $categoryClass);
